@@ -1,0 +1,39 @@
+{
+  "name": "vite-ssr-test",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node server",
+    "build": "npm run build:client && npm run build:server",
+    "build:client": "vite build --ssrManifest --outDir dist/client",
+    "build:server": "vite build --ssr src/entry-server.jsx --outDir dist/server",
+    "server:ssr": "cross-env NODE_ENV=production node server",
+    "server:ssr:trace": "cross-env NODE_ENV=production sudo strace -f -t -e trace=file --output trace_ssr.txt node server",
+    "server:ssr:trace:partial":"grep react-textarea-autosize trace_ssr.txt > trace_ssr.partial.txt",
+    "generate": "vite build --ssrManifest .vite/ssr-manifest.json --outDir dist/static && npm run build:server && node prerender",
+    "generate:trace": "vite build --ssrManifest .vite/ssr-manifest.json --outDir dist/static && sudo strace -f -t -e trace=file --output trace_ssg.txt node prerender.js",
+    "generate:trace:partial":"grep react-textarea-autosize trace_ssg.txt > trace_ssg.partial.txt",
+    "server:gererated": "http-server dist/static"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sirv": "^2.0.4"
+  },
+  "devDependencies": {
+    "@mantine/core": "^7.5.0",
+    "@mantine/hooks": "^7.5.0",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "cross-env": "^7.0.3",
+    "http-server": "^14.1.1",
+    "postcss": "^8.4.33",
+    "postcss-preset-mantine": "^1.12.3",
+    "postcss-simple-vars": "^7.0.1",
+    "vite": "^5.0.12"
+  }
+}
